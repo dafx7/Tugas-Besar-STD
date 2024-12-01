@@ -9,16 +9,27 @@ using namespace std;
 #define info(P) P->info
 #define next(P) P->next
 #define prev(P) P->prev
-#define lChild(P) P->lChild
+#define child(P) P->child
+#define parent(P) P->parent
 
-typedef string infotype;
+struct mahasiswa {
+    string nama, nim;
+};
+
+struct mataKuliah {
+    string nama;
+    int sks;
+};
+
+typedef mahasiswa infotypeMahasiswa;
+typedef mataKuliah infotypemataKuliah;
 typedef struct elmList_parent *address_parent;
 typedef struct elmList_child *address_child;
+typedef struct elmList_relasi *address_relasi;
 
 // Struktur Child: Single Linked List (SLL)
 struct elmList_child {
-    infotype courseName;
-    int sks;
+    infotypemataKuliah courseName;
     address_child next;
 };
 
@@ -28,8 +39,7 @@ struct ListChild {
 
 // Struktur Parent: Double Linked List (DLL)
 struct elmList_parent {
-    infotype studentName;
-    ListChild lChild;
+    infotypemataKuliah studentName;
     address_parent next;
     address_parent prev;
 };
@@ -39,31 +49,50 @@ struct ListParent {
     address_parent last;
 };
 
-// Fungsi-Fungsi untuk Child (SLL)
-bool isEmptyChild(ListChild L);
-void createListChild(ListChild &L);
-address_child createNewElmtChild(infotype courseName, int sks);
-void insertFirstChild(ListChild &L, address_child P);
-void insertLastChild(ListChild &L, address_child P);
-void deleteFirstChild(ListChild &L, address_child &P);
-void deleteLastChild(ListChild &L, address_child &P);
-void showChild(ListChild L);
-address_child searchChild(ListChild L, infotype X);
+// Struktur Relasi: Single Linked List (SLL)
+struct elmList_relasi {
+    address_relasi next;
+    address_parent parent;
+    address_child parent;
+};
 
-// Fungsi-Fungsi untuk Parent (DLL)
-bool isEmptyParent(ListParent L);
-void createListParent(ListParent &L);
-address_parent createNewElmtParent(infotype studentName);
-void insertFirstParent(ListParent &L, address_parent P);
-void insertLastParent(ListParent &L, address_parent P);
-void deleteFirstParent(ListParent &L, address_parent &P);
-void deleteLastParent(ListParent &L, address_parent &P);
-void showParent(ListParent L);
-address_parent searchParent(ListParent L, infotype X);
+struct ListRelasi {
+    address_relasi first;
+};
 
-// Fungsi-Fungsi Operasi Gabungan
-void showAllParentsWithChildren(ListParent L);
-bool deleteChildFromParent(ListParent &L, infotype parentName, infotype courseName);
-int calculateTotalSKS(ListParent L, infotype parentName);
+// a. Insert data mahasiswa dari depan/belakang
+void insertMahasiswaDepan(ListParent &L, infotypeMahasiswa dataMahasiswa);
+void insertMahasiswaBelakang(ListParent &L, infotypeMahasiswa dataMahasiswa);
+
+// b. Show semua data mahasiswa
+void showAllMahasiswa(ListParent L);
+
+// c. Hapus mahasiswa beserta mata kuliahnya
+void deleteMahasiswa(ListParent &L, ListRelasi &relasi, string nim);
+
+// d. Cari data mahasiswa
+address_parent searchMahasiswa(ListParent L, string nim);
+
+// e. Insert data mata kuliah untuk mahasiswa tertentu
+void insertMataKuliah(ListRelasi &relasi, ListChild &childList, ListParent &L, string nim, infotypemataKuliah dataMataKuliah);
+
+// f. Ubah data mahasiswa atau mata kuliah
+void updateMahasiswa(ListParent &L, string nim, infotypeMahasiswa newData);
+void updateMataKuliah(ListChild &childList, string namaMataKuliah, infotypemataKuliah newData);
+
+// g. Tampilkan semua data mahasiswa dengan mata kuliahnya
+void showAllData(ListParent L, ListRelasi relasi, ListChild childList);
+
+// h. Cari mata kuliah tertentu pada mahasiswa tertentu
+address_child searchMataKuliahOnMahasiswa(ListRelasi relasi, ListParent L, string nim, string namaMataKuliah);
+
+// i. Hapus mata kuliah pada mahasiswa tertentu
+void deleteMataKuliah(ListRelasi &relasi, ListChild &childList, ListParent &L, string nim, string namaMataKuliah);
+
+// j. Hitung total SKS yang diambil mahasiswa
+int totalSKS(ListRelasi relasi, ListParent L, string nim);
+
+// k. Main program untuk mengelola fitur-fitur
+void mainMenu();
 
 #endif // MLL_H_INCLUDED
