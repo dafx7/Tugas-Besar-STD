@@ -13,11 +13,11 @@ using namespace std;
 #define parent(P) P->parent
 
 struct mahasiswa {
-    string nama, nim;
+    string nama, nim, kelas, gender;
 };
 
 struct mataKuliah {
-    string nama;
+    string nama, kode;
     int sks;
 };
 
@@ -29,7 +29,7 @@ typedef struct elmList_relasi *address_relasi;
 
 // Struktur Child: Single Linked List (SLL)
 struct elmList_child {
-    infotypemataKuliah courseName;
+    infotypemataKuliah info;
     address_child next;
 };
 
@@ -39,7 +39,7 @@ struct ListChild {
 
 // Struktur Parent: Double Linked List (DLL)
 struct elmList_parent {
-    infotypemataKuliah studentName;
+    infotypeMahasiswa info;
     address_parent next;
     address_parent prev;
 };
@@ -53,16 +53,18 @@ struct ListParent {
 struct elmList_relasi {
     address_relasi next;
     address_parent parent;
-    address_child parent;
+    address_child child;
 };
 
 struct ListRelasi {
     address_relasi first;
 };
 
+address_parent createNewElmMahasiswa(infotypeMahasiswa x);
+
 // a. Insert data mahasiswa dari depan/belakang
-void insertMahasiswaDepan(ListParent &L, infotypeMahasiswa dataMahasiswa);
-void insertMahasiswaBelakang(ListParent &L, infotypeMahasiswa dataMahasiswa);
+void insertMahasiswaDepan(ListParent &L, address_parent P);
+void insertMahasiswaBelakang(ListParent &L, address_parent P);
 
 // b. Show semua data mahasiswa
 void showAllMahasiswa(ListParent L);

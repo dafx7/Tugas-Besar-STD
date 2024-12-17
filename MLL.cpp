@@ -1,51 +1,60 @@
 #include "MLL.h"
 
-// a. Insert data mahasiswa dari depan
-void insertMahasiswaDepan(ListParent &L, infotypeMahasiswa dataMahasiswa) {
+address_parent createNewElmMahasiswa(infotypeMahasiswa x) {
     address_parent newNode = new elmList_parent;
-    info(newNode) = dataMahasiswa;
-    next(newNode) = nullptr;
-    prev(newNode) = nullptr;
+    info(newNode) = x; // Tidak ada error, tipe data cocok
+    next(newNode) = NULL;
+    prev(newNode) = NULL;
 
-    if (first(L) == nullptr) { // Jika list kosong
-        first(L) = newNode;
-        last(L) = newNode;
+    return newNode;
+}
+
+
+// a. Insert data mahasiswa dari depan
+void insertMahasiswaDepan(ListParent &L, address_parent P) {
+    if (first(L) == NULL) { // Jika list kosong
+        first(L) = P;
+        last(L) = P;
     } else { // Jika list tidak kosong
-        next(newNode) = first(L);
-        prev(first(L)) = newNode;
-        first(L) = newNode;
+        next(P) = first(L);
+        prev(first(L)) = P;
+        first(L) = P;
     }
 }
 
 // a. Insert data mahasiswa dari belakang
-void insertMahasiswaBelakang(ListParent &L, infotypeMahasiswa dataMahasiswa) {
-    address_parent newNode = new elmList_parent;
-    info(newNode) = dataMahasiswa;
-    next(newNode) = nullptr;
-    prev(newNode) = nullptr;
-
-    if (first(L) == nullptr) { // Jika list kosong
-        first(L) = newNode;
-        last(L) = newNode;
+void insertMahasiswaBelakang(ListParent &L, address_parent P) {
+    if (first(L) == NULL) { // Jika list kosong
+        first(L) = P;
+        last(L) = P;
     } else { // Jika list tidak kosong
-        prev(newNode) = last(L);
-        next(last(L)) = newNode;
-        last(L) = newNode;
+        prev(P) = last(L);
+        next(last(L)) = P;
+        last(L) = P;
     }
 }
 
+
 // b. Show semua data mahasiswa
-void showAllMahasiswa(ListParent L) {
-    if (first(L) == nullptr) {
+void showAllMahasiswa(const ListParent &L) {
+    if (first(L) == NULL) {
         cout << "Tidak ada data mahasiswa." << endl;
         return;
     }
 
+    cout << "===== Data Mahasiswa =====" << endl;
     address_parent current = first(L);
-    while (current != nullptr) {
-        cout << "Nama: " << info(current).nama
-             << " | NIM: " << info(current).nim << endl;
+    int i = 1; // Untuk nomor urut
+
+    while (current != NULL) {
+        cout << i << ". Nama   : " << info(current).nama << endl;
+        cout << "   NIM    : " << info(current).nim << endl;
+        cout << "   Kelas  : " << info(current).kelas << endl;
+        cout << "   Gender : " << info(current).gender << endl;
+        cout << "--------------------------" << endl;
+
         current = next(current);
+        i++;
     }
 }
 
