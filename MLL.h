@@ -60,7 +60,9 @@ struct ListRelasi {
     address_relasi first;
 };
 
+
 address_parent createNewElmMahasiswa(infotypeMahasiswa x);
+address_child createNewElmMataKuliah(infotypemataKuliah x);
 
 // a. Insert data mahasiswa dari depan/belakang
 void insertMahasiswaDepan(ListParent &L, address_parent P);
@@ -83,7 +85,7 @@ void updateMahasiswa(ListParent &L, string nim, infotypeMahasiswa newData);
 void updateMataKuliah(ListChild &childList, string namaMataKuliah, infotypemataKuliah newData);
 
 // g. Tampilkan semua data mahasiswa dengan mata kuliahnya
-void showAllData(ListParent L, ListRelasi relasi, ListChild childList);
+void showAllData(ListParent L, ListRelasi relasi);
 
 // h. Cari mata kuliah tertentu pada mahasiswa tertentu
 address_child searchMataKuliahOnMahasiswa(ListRelasi relasi, ListParent L, string nim, string namaMataKuliah);
