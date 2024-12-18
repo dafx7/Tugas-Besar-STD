@@ -59,14 +59,72 @@ void showAllMahasiswa(const ListParent &L) {
 }
 
 // d. Cari data mahasiswa
-address_parent searchMahasiswa(ListParent L, string nim);
+address_parent searchMahasiswa(ListParent L, string nim){
+    address_parent P = first(L);
+    while (P != NULL) {
+        if (info(P).nim == nim) {
+            return P;
+        }
+        P = next(P);
+    }
+    return NULL;
+}
 
 // e. Insert data mata kuliah untuk mahasiswa tertentu
-void insertMataKuliah(ListRelasi &relasi, ListChild &childList, ListParent &L, string nim, infotypemataKuliah dataMataKuliah);
+void insertMataKuliah(ListRelasi &relasi, ListChild &childList, ListParent &L, string nim, infotypemataKuliah dataMataKuliah) {
+    address_parent mahasiswa = searchMahasiswa(L, nim);
+    if (mahasiswa == NULL) {
+        cout << "Mahasiswa dengan NIM " << nim << " tidak ditemukan." << endl;
+        return;
+    }
+
+    // Buat node mata kuliah baru jika belum ada di daftar child
+    address_child matakuliah = first(childList);
+    while (matakuliah != NULL && info(matakuliah).kode != dataMataKuliah.kode) {
+        matakuliah = next(matakuliah);
+    }
+    if (matakuliah == NULL) { // Jika mata kuliah belum ada daftarnya
+        matakuliah = new elmList_child;
+        info(matakuliah) = dataMataKuliah;
+        next(matakuliah) = first(childList);
+        first(childList) = matakuliah;
+    }
+
+    // Buat node relasi untuk menghubungkan mahasiswa dengan matakuliah
+    address_relasi newRelasi = new elmList_relasi;
+    parent(newRelasi) = mahasiswa;
+    child(newRelasi) = matakuliah;
+    next(newRelasi) = first(relasi);
+    first(relasi) = newRelasi;
+}
 
 // f. Ubah data mahasiswa atau mata kuliah
-void updateMahasiswa(ListParent &L, string nim, infotypeMahasiswa newData);
-void updateMataKuliah(ListChild &childList, string namaMataKuliah, infotypemataKuliah newData);
+void updateMahasiswa(ListParent &L, string nim, infotypeMahasiswa newData) {
+    address_parent mahasiswa = searchMahasiswa(L, nim);
+    if (mahasiswa == NULL) {
+        cout << "Mahasiswa dengan NIM " << nim << " tidak ditemukan." << endl;
+        return;
+    }
+    info(mahasiswa).nama = newData.nama;
+    info(mahasiswa).kelas = newData.kelas;
+    info(mahasiswa).gender = newData.gender;
+    cout << "Data mahasiswa dengan NIM " << nim << " berhasil diperbarui." << endl;
+}
+
+void updateMataKuliah(ListChild &childList, string namaMataKuliah, infotypemataKuliah newData) {
+    address_child matakuliah = first(childList);
+    while (matakuliah != NULL && info(matakuliah).nama != namaMataKuliah) {
+        matakuliah = next(matakuliah);
+    }
+    if (matakuliah == NULL) {
+        cout << "Mata kuliah " << namaMataKuliah << " tidak ditemukan." << endl;
+        return;
+    }
+    info(matakuliah).nama = newData.nama;
+    info(matakuliah).kode = newData.kode;
+    info(matakuliah).sks = newData.sks;
+    cout << "Data mata kuliah " << namaMataKuliah << " berhasil diperbarui." << endl;
+}
 
 // g. Tampilkan semua data mahasiswa dengan mata kuliahnya
 void showAllData(ListParent L, ListRelasi relasi, ListChild childList);
