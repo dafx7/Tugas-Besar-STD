@@ -60,6 +60,8 @@ struct ListRelasi {
     address_relasi first;
 };
 
+void insertLastMataKuliah(ListChild &childList, address_child P);
+void showAllMataKuliah(ListChild childList);
 
 address_parent createNewElmMahasiswa(infotypeMahasiswa x);
 address_child createNewElmMataKuliah(infotypemataKuliah x);
@@ -97,6 +99,6 @@ void deleteMataKuliah(ListRelasi &relasi, ListChild &childList, ListParent &L, s
 int totalSKS(ListRelasi relasi, ListParent L, string nim);
 
 // k. Main program untuk mengelola fitur-fitur
-void mainMenu();
+void mainMenu(ListParent &mahasiswaList, ListRelasi &relasiList, ListChild &mataKuliahList);
 
 #endif // MLL_H_INCLUDED

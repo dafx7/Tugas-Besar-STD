@@ -1,5 +1,40 @@
 #include "MLL.h"
 
+// Insert data mata kuliah dari belakang
+void insertLastMataKuliah(ListChild &childList, address_child P) {
+    if (first(childList) == NULL) { // Jika list kosong
+        first(childList) = P;
+    } else { // Jika list tidak kosong
+        address_child current = first(childList);
+        while (next(current) != NULL) { // Cari elemen terakhir
+            current = next(current);
+        }
+        next(current) = P;
+    }
+}
+
+// Tampilkan semua data mata kuliah
+void showAllMataKuliah(ListChild childList) {
+    if (first(childList) == NULL) { // Jika list kosong
+        cout << "Tidak ada data mata kuliah." << endl;
+        return;
+    }
+
+    cout << "===== Data Mata Kuliah =====" << endl;
+    address_child current = first(childList);
+    int i = 1; // Nomor urut
+
+    while (current != NULL) {
+        cout << i << ". Nama: " << info(current).nama << endl;
+        cout << "   Kode: " << info(current).kode << endl;
+        cout << "   SKS : " << info(current).sks << endl;
+        cout << "-----------------------------" << endl;
+        current = next(current);
+        i++;
+    }
+}
+
+
 address_parent createNewElmMahasiswa(infotypeMahasiswa x) {
     address_parent newNode = new elmList_parent;
     info(newNode) = x; // Tidak ada error, tipe data cocok
@@ -250,17 +285,7 @@ int totalSKS(ListRelasi relasi, ListParent L, string nim) {
 
 
 // k. Main program untuk mengelola fitur-fitur
-void mainMenu() {
-    ListParent mahasiswaList;
-    ListRelasi relasiList;
-    ListChild mataKuliahList;
-
-    // Inisialisasi list kosong
-    first(mahasiswaList) = NULL;
-    last(mahasiswaList) = NULL;
-    first(relasiList) = NULL;
-    first(mataKuliahList) = NULL;
-
+void mainMenu(ListParent &mahasiswaList, ListRelasi &relasiList, ListChild &mataKuliahList) {
     int pilihan;
     do {
         cout << "\n===== Menu Utama =====" << endl;
@@ -274,6 +299,8 @@ void mainMenu() {
         cout << "8. Ubah Data Mahasiswa" << endl;
         cout << "9. Ubah Data Mata Kuliah" << endl;
         cout << "10. Hitung Total SKS Mahasiswa" << endl;
+        cout << "11. Tambah Mata Kuliah (Insert Last)" << endl;
+        cout << "12. Tampilkan Semua Mata Kuliah" << endl; // Tambahkan menu baru
         cout << "0. Keluar" << endl;
         cout << "Pilih menu: ";
         cin >> pilihan;
@@ -416,6 +443,26 @@ void mainMenu() {
 
                 int total = totalSKS(relasiList, mahasiswaList, nim);
                 cout << "Total SKS yang diambil mahasiswa dengan NIM " << nim << ": " << total << endl;
+                break;
+            }
+            case 11: { // Tambah Mata Kuliah (Insert Last)
+                infotypemataKuliah mataKuliah;
+                cout << "Masukkan Nama Mata Kuliah: ";
+                cin.ignore(); // Membersihkan input buffer
+                getline(cin, mataKuliah.nama); // Mendukung input dengan spasi
+                cout << "Masukkan Kode Mata Kuliah: ";
+                cin >> mataKuliah.kode;
+                cout << "Masukkan SKS Mata Kuliah: ";
+                cin >> mataKuliah.sks;
+
+                address_child newMataKuliah = createNewElmMataKuliah(mataKuliah);
+                insertLastMataKuliah(mataKuliahList, newMataKuliah);
+
+                cout << "Mata kuliah berhasil ditambahkan ke belakang daftar!" << endl;
+                break;
+            }
+            case 12: { // Tampilkan Semua Mata Kuliah
+                showAllMataKuliah(mataKuliahList);
                 break;
             }
             case 0:

@@ -38,7 +38,7 @@ int main() {
     initMataKuliah(mataKuliahList);
 
     // Panggil menu utama
-    mainMenu();
+    mainMenu(mahasiswaList, relasiList, mataKuliahList);
 
     return 0;
 }
