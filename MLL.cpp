@@ -101,6 +101,60 @@ void showAllMahasiswa(ListParent L) {
     }
 }
 
+void deleteMahasiswa(ListParent &L, ListRelasi &relasi, string nim) {
+    // Cari mahasiswa berdasarkan NIM
+    address_parent P = first(L);
+    while (P != NULL && info(P).nim != nim) {
+        P = next(P);
+    }
+
+    if (P == NULL) {
+        cout << "Mahasiswa dengan NIM " << nim << " tidak ditemukan.\n";
+        return;
+    }
+
+    address_relasi R = first(relasi);
+    address_relasi prevR = NULL;
+    while (R != NULL) {
+        if (parent(R) == P) {
+            address_relasi temp = R;
+            if (prevR == NULL) {
+                first(relasi) = next(R);
+            } else {
+                next(prevR) = next(R);
+            }
+            R = next(R);
+            delete temp;
+        } else {
+            prevR = R;
+            R = next(R);
+        }
+    }
+
+    // Hapus mahasiswa dari list parent
+    if (P == first(L) && P == last(L)) {
+        // Hanya satu elemen di list
+        first(L) = NULL;
+        last(L) = NULL;
+    } else if (P == first(L)) {
+        // Hapus elemen pertama
+        first(L) = next(P);
+        prev(first(L)) = NULL;
+    } else if (P == last(L)) {
+        // Hapus elemen terakhir
+        last(L) = prev(P);
+        next(last(L)) = NULL;
+    } else {
+        // Hapus elemen di tengah
+        next(prev(P)) = next(P);
+        prev(next(P)) = prev(P);
+    }
+
+    delete P;
+    cout << "Mahasiswa dengan NIM " << nim << " beserta mata kuliahnya berhasil dihapus.\n";
+}
+
+
 // d. Cari data mahasiswa
 address_parent searchMahasiswa(ListParent L, string nim){
     address_parent P = first(L);
